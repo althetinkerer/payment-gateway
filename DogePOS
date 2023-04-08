@@ -1,0 +1,41 @@
+from dogecoinrpc import connect_to_local, JSONRPCException
+
+# Connect to the Dogecoin Core node
+dogecoin = connect_to_local()
+
+def generate_new_address():
+    try:
+        # Create a new address
+        new_address = dogecoin.getnewaddress()
+        return new_address
+    except JSONRPCException as e:
+        print(f"Error generating new address: {e}")
+        return None
+
+def monitor_incoming_payments(address, expected_amount, min_confirmations=3):
+    try:
+        # Get the balance of the address
+        balance = dogecoin.getreceivedbyaddress(address, min_confirmations)
+
+        # Check if the received amount is greater than or equal to the expected amount
+        if balance >= expected_amount:
+            return True
+    except JSONRPCException as e:
+        print(f"Error monitoring incoming payments: {e}")
+        return False
+    return False
+
+if __name__ == "__main__":
+    # Generate a new address for the transaction
+    new_address = generate_new_address()
+    if new_address:
+        print(f"Generated new address: {new_address}")
+
+        # Expected amount in DOGE
+        expected_amount = 100
+
+        # Monitor incoming payments
+        while True:
+            if monitor_incoming_payments(new_address, expected_amount):
+                print("Payment received and confirmed!")
+                break
