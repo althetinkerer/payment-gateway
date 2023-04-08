@@ -1,0 +1,2 @@
+# Using the dogecoin-python library, which is a wrapper around the Dogecoin Core JSON-RPC API. First, you need to install the library:
+pip install git+https://github.com/andrew-d/dogecoin-python
